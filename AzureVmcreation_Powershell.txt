@@ -1,0 +1,64 @@
+#Login to Azure portal
+$credentails=Get-Credential
+Login-AzureRmAccount  -Credential $credentails
+
+#Set the particular subscription (Innvoationpublic)
+Set-AzureRmContext -SubscriptionId fe80cdc3-c582-4a15-a816-3361eeb2e3b1
+
+# Variables for common values
+$resourceGroup = 292424
+$location = westeurope
+$vmName = myVM
+
+# Create user object
+$cred = Get-Credential -Message Enter a username and password for the virtual machine.
+
+# Create a resource group
+New-AzureRmResourceGroup -Name $resourceGroup -Location $location
+
+# Create a subnet configuration
+$subnetConfig = New-AzureRmVirtualNetworkSubnetConfig -Name mySubnet -AddressPrefix 192.168.1.024
+
+# Create a virtual network
+$vnet = New-AzureRmVirtualNetwork -ResourceGroupName $resourceGroup -Location $location `
+  -Name MYvNET -AddressPrefix 192.168.0.016 -Subnet $subnetConfig
+
+# Create a public IP address and specify a DNS name
+$pip = New-AzureRmPublicIpAddress -ResourceGroupName $resourceGroup -Location $location `
+  -Name mypublicdns$(Get-Random) -AllocationMethod Static -IdleTimeoutInMinutes 4
+
+# Create an inbound network security group rule for port 3389
+$nsgRuleRDP = New-AzureRmNetworkSecurityRuleConfig -Name myNetworkSecurityGroupRuleRDP  -Protocol Tcp `
+  -Direction Inbound -Priority 1000 -SourceAddressPrefix  -SourcePortRange  -DestinationAddressPrefix  `
+  -DestinationPortRange 3389 -Access Allow
+
+# Create a network security group
+$nsg = New-AzureRmNetworkSecurityGroup -ResourceGroupName $resourceGroup -Location $location `
+  -Name myNetworkSecurityGroup -SecurityRules $nsgRuleRDP
+
+# Create a virtual network card and associate with public IP address and NSG
+$nic = New-AzureRmNetworkInterface -Name myNic -ResourceGroupName $resourceGroup -Location $location `
+  -SubnetId $vnet.Subnets[0].Id -PublicIpAddressId $pip.Id -NetworkSecurityGroupId $nsg.Id
+
+# Create a virtual machine configuration
+$vmConfig = New-AzureRmVMConfig -VMName $vmName -VMSize Standard_DS1_v2  `
+Set-AzureRmVMOperatingSystem -Windows -ComputerName $vmName -Credential $cred  `
+Set-AzureRmVMSourceImage -PublisherName MicrosoftWindowsServer -Offer WindowsServer -Skus 2016-Datacenter -Version latest  `
+Add-AzureRmVMNetworkInterface -Id $nic.Id
+
+# Create a virtual machine
+New-AzureRmVM -ResourceGroupName $resourceGroup -Location $location -VM $vmConfig
+
+
+
+
+To Create new VM
+1. resource group -- name, location
+2. Subnet - name, location, address prefix
+3. Virtualnetwork and link the newly created Subnet to this Vnet - name, location, addressprefix,subnetname
+4. Public Ip address - pipname
+5. Nsg rule -- rule
+6. NSG
+7. Network interface
+8. Virtualmachineconfig - offer, sku version , publsihername
+9. vmcreation
