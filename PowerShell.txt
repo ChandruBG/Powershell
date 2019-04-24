@@ -1,0 +1,94 @@
+Powershell Topics:
+
+It is Microsoft task automation framework.It consistes of command line shell and associated scripting langauage and it is built on top of Microsoft .net framework
+Powershell provides full access  to the COM and WMI, enabling the administrators to perform administrative tasks on both local and remote windows system.
+
+Command Let or cmdlet:
+
+1. cmdlet is .net framework class objects; and not just stand alone executable
+2. Cmdlet process a single object at a time.
+3. Cmdlet process works on the objects not on text stream and object can be passed as output for pipelining
+
+Create Folder on local drive:
+New-item -path "D:\TestFolder" -itemtype directory
+Create file:
+New-item -path "D:\TestFolder\tst.txt" -itemtype File
+
+Powershell basic examples:
+
+#New-Item -Path "D:\TestFolder1" -ItemType Directory
+#New-item -path "D:\TestFolder\tst.txt" -ItemType File
+
+#copy-item "D:\TestFolder" "D:\TestFolder1"
+#copy-item -Filter *.txt -path "D:\TestFolder" -recurse -Destination "D:\TestFolder1\TestFolder"
+#Remove-item "D:/TestFolder1" -Recurse
+#Remove-item "D:/TestFolder"
+#move-item "D:/testFolder" -Destination "D:/TestFolder1"
+#Rename-item "D:/TestFolder1" "D:/testFolder2"
+#$var=Get-Content "D:/TestFolder/tst.txt"
+#write-output $var.length
+
+#test-path "D:/TestFolder1"
+#get-Date
+#Set-Date -Date(get-Date).AddDays(2)
+
+#new-item -path "D:\TestFolder\test.txt" -ItemType File
+
+<#
+set-content "D:\TestFolder\test.txt" "Welcome to Powershell learning"
+
+Set-Content "D:\TestFolder\test.txt"
+
+get-Content "D:\TestFolder\test.txt"
+
+New-Item -path "D:\testFolder\testxl2.csv" -ItemType File
+Set-Content "D:\TestFolder\testxl.csv" "abc, def,ghk"
+
+clear-content "D:\testfolder\test.txt"
+
+
+Set-Content "D:\TestFolder\test.txt" "Hello"
+
+Add-Content "D:\TestFolder\test.txt" "Worldgggg" #>
+
+<#$list ="one","two","two","three","Four","Five","Five"
+$list | sort | Get-Unique  #>
+<# 
+$A=Get-childitem "D:/TestFolder"
+
+Write-Output $A.Name #>
+
+#Get-Service | Where-Object {$_.Status -eq "Stopped"}
+
+#Get-ChildItem "D:\TestFolder\test.txt" | Select-Object name
+
+<# $list=1,2,3,4,5,6
+
+foreach($v in $list)
+{
+  write-output $v
+}  #>
+
+<# $choice= Read-host "Read from choice"
+ $choice #>
+
+
+# get-Service | where-object {$_.status -eq "Stopped"} | sort-object -property @{Expression="Name"; Descending=$False} `
+ # | select-object -Property Status, Name, displayaname -last 10
+ 
+ #Invoke-Item "D:\TestFolder\test.txt"
+
+ #$location=Get-Location
+
+ #$location |Get-Member
+
+ start-service "msiserver"
+ Restart-Service "msiserver"
+Get-Service "msiserver"
+Stop-Service "msiserver"
+Get-service "msiserver"
+
+get-help Restart-Service
+
+
+https://xnb4xe2vk4vd6mystorage.blob.core.windows.net/data/Wipro_Azure_WS.txt
