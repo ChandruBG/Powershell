@@ -1,0 +1,45 @@
+
+Enter-PSSession -ComputerName NameofVM  -Credentials "Adadmin"
+Exit-PSSession
+Get-PSSession
+$ssh=New-PSSession -ComputerName NameofVM -Credentails "Adadmin"
+
+Remove-PSSession -Id "sessionID"
+
+// Copy the file from the source machine to the Remote Destination server
+$ssh=New-PSSession -ComputerName NameofVM -Credentails "Adadmin"
+Copy-Item -Path "C:\Test.txt" -Destination "C:\Testr.txt" -tosession $ssh
+
+
+---------------------------------------------------------------------------------------
+
+File handlinh operaton:
+
+#Create the Folder in the C drive
+New-Item -Path "C:\Users\PowerShellTest" -ItemType directory
+
+#Cretae the text file inside the folder
+New-Item   "C:\Users\PowerShellTest1\test.txt" -ItemType file
+
+#Set the conetent to the File
+Set-Content -path "C:\Users\PowerShellTest1\test.txt" "Hello world"
+
+Get-Content -Path "C:\Users\PowerShellTest1\test.txt"
+
+Set-Content -path "C:\Users\PowerShellTest\test1.txt" "Hello world test"
+
+Move-Item -Path "C:\Users\PowerShellTest1" -Destination "C:\Users\PowerShellTest" 
+
+Get-ChildItem -Path "C:\Users\PowerShellTest\*" -Recurse -Force  -Exclude Directory
+
+#Write-Host $vartest.
+
+Get-ChildItem -Recurse -File | Measure-object | %{_$.Count}
+
+Get-ChildItem -path "C:\Users\PowershellTest\" -Recurse -Force -Include *.*
+
+Get-Content "C:\users\PowershellTest\test1.txt"
+
+#Count the number of files available in the Folder
+(Get-ChildItem -Path "E:\AzureLearning" -Recurse -Force -Include "*.*" | Select Name).count
+
